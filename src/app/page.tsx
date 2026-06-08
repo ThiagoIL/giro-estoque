@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+"use client";
+
 import { useState } from "react";
 import { Building2, Package as PackageIcon } from "lucide-react";
 import Header from "@/components/Header";
@@ -8,11 +9,7 @@ import ProductCard from "@/components/ProductCard";
 import { categorias } from "@/lib/categorias";
 import { useApp } from "@/context/AppContext";
 
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
-function Index() {
+export default function IndexPage() {
   const { produtos } = useApp();
   const [busca, setBusca] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
@@ -25,7 +22,10 @@ function Index() {
     return buscaOk && categoriaOk;
   });
 
-  const limparFiltros = () => { setBusca(""); setCategoriaSelecionada(""); };
+  const limparFiltros = () => {
+    setBusca("");
+    setCategoriaSelecionada("");
+  };
   const temFiltro = busca !== "" || categoriaSelecionada !== "";
 
   return (
@@ -78,7 +78,7 @@ function Index() {
           <button
             onClick={limparFiltros}
             disabled={!temFiltro}
-            className="bg-zinc-900 hover:bg-black disabled:opacity-40 disabled:cursor-not-allowed px-6 py-4 rounded-2xl text-white font-semibold transition shadow-lg"
+            className="bg-zinc-900 hover:bg-black disabled:opacity-40 disabled:cursor-not-allowed px-6 py-4 rounded-2xl text-white font-semibold transition shadow-lg cursor-pointer"
           >
             Remover Filtros
           </button>
@@ -92,7 +92,9 @@ function Index() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in duration-500">
-            {produtosFiltrados.map((item) => <ProductCard key={item.id} item={item} />)}
+            {produtosFiltrados.map((item) => (
+              <ProductCard key={item.id} item={item} />
+            ))}
           </div>
         )}
       </section>

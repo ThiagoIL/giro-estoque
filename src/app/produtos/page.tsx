@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+"use client";
+
 import { useState } from "react";
 import { Package as PackageIcon } from "lucide-react";
 import Header from "@/components/Header";
@@ -7,17 +8,15 @@ import ProductCard from "@/components/ProductCard";
 import { categoriasNomes } from "@/lib/categorias";
 import { useApp } from "@/context/AppContext";
 
-export const Route = createFileRoute("/produtos")({
-  component: ProdutosPage,
-});
-
-function ProdutosPage() {
+export default function ProdutosPage() {
   const { produtos } = useApp();
   const [busca, setBusca] = useState("");
   const [cat, setCat] = useState("");
 
   const lista = produtos.filter((p) => {
-    const buscaOk = p.produto.toLowerCase().includes(busca.toLowerCase()) || p.empresa.toLowerCase().includes(busca.toLowerCase());
+    const buscaOk =
+      p.produto.toLowerCase().includes(busca.toLowerCase()) ||
+      p.empresa.toLowerCase().includes(busca.toLowerCase());
     const catOk = cat === "" || p.categoria === cat;
     return buscaOk && catOk;
   });
@@ -33,11 +32,26 @@ function ProdutosPage() {
 
         <div className="flex flex-col md:flex-row gap-3 mt-8">
           <SearchBar value={busca} onChange={setBusca} />
-          <select value={cat} onChange={(e) => setCat(e.target.value)} className="px-4 py-4 rounded-2xl border border-zinc-200 bg-white outline-none focus:border-orange-500 font-semibold text-zinc-700">
+          <select
+            value={cat}
+            onChange={(e) => setCat(e.target.value)}
+            className="px-4 py-4 rounded-2xl border border-zinc-200 bg-white outline-none focus:border-orange-500 font-semibold text-zinc-700"
+          >
             <option value="">Todas as categorias</option>
-            {categoriasNomes.map((c) => <option key={c} value={c}>{c}</option>)}
+            {categoriasNomes.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
           </select>
-          <button onClick={() => { setBusca(""); setCat(""); }} disabled={!temFiltro} className="bg-zinc-900 hover:bg-black disabled:opacity-40 disabled:cursor-not-allowed px-6 py-4 rounded-2xl text-white font-semibold transition shadow-lg">
+          <button
+            onClick={() => {
+              setBusca("");
+              setCat("");
+            }}
+            disabled={!temFiltro}
+            className="bg-zinc-900 hover:bg-black disabled:opacity-40 disabled:cursor-not-allowed px-6 py-4 rounded-2xl text-white font-semibold transition shadow-lg cursor-pointer"
+          >
             Remover Filtros
           </button>
         </div>
@@ -50,7 +64,9 @@ function ProdutosPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in duration-500">
-              {lista.map((p) => <ProductCard key={p.id} item={p} />)}
+              {lista.map((p) => (
+                <ProductCard key={p.id} item={p} />
+              ))}
             </div>
           )}
         </div>
